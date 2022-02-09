@@ -1,0 +1,2 @@
+
+<button (click)="sidenav.toggle()">Show Sidenav</button> trigger a boolen as a toggle button without function
