@@ -1,11 +1,41 @@
-<section>
-  <form action="">
+<section class="signup-form">
+  <form action="" fxLayout="column" fxLayoutAlign="center center" #f="ngForm" (ngSubmit)="onSubmit(f)">
     <mat-form-field>
-      <input type="email" matInput placeholder="Your Email">
+      <input
+        type="email"
+        ngModel
+        matInput
+        name="email"
+        email
+        required
+        #emailInput="ngModel"
+        placeholder="Your Email">
+      <mat-error *ngIf="emailInput.hasError('required')">Required Area</mat-error>
+      <mat-error>Invalid Email Address</mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input type="password" matInput placeholder="Your Password">
+    <mat-form-field hintLabel="At least 6 characters long">
+      <input
+        type="password"
+        ngModel
+        matInput
+        name="password"
+        minlength="6"
+        required
+        #pwInput="ngModel"
+        placeholder="Your Password">
+      <mat-hint align="end"> {{ pwInput.value?.length }}/ 6 </mat-hint>
+      <mat-error>Has to be at least 6 characters long.</mat-error>
     </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Your Birth Date</mat-label>
+      <input matInput [matDatepicker]="picker" [max]="maxDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary">Submit</button>
+    <button type="button" mat-raised-button color="warn" (click)="logTest('hi there')">Log Test</button>
   </form>
 </section>
-Check 03-23
+
+
