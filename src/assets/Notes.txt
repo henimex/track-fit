@@ -1,2 +1,14 @@
 
 <button (click)="sidenav.toggle()">Show Sidenav</button> trigger a boolen as a toggle button without function
+
+Dialog Passed Data Share:
+@Inject(MAT_DIALOG_DATA) private passedData: any
+  receiveData(){
+      this.progressFromCurrentTraining = this.passedData.progress
+    }
+
+  <p>You already got {{ progressFromCurrentTraining }}%</p>
+
+
+@Inject(MAT_DIALOG_DATA) public passedData: any
+  <p>You already got {{ passedData.progress }}%</p>
