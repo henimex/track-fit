@@ -1,6 +1,5 @@
 <section class="signup-form">
   <form action="" fxLayout="column" fxLayoutAlign="center center" #f="ngForm" fxLayoutGap="10px" (ngSubmit)="onSubmit(f)">
-
     <mat-form-field>
       <input
         type="email"
@@ -38,7 +37,7 @@
 
     <mat-checkbox ngModel name="agree" required labelPosition="after" color="primary">Agree to Terms</mat-checkbox>
 
-    <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Submit</button>
+    <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Register</button>
     <button type="button" mat-raised-button color="warn" (click)="logTest('hi there')">Log Test</button>
 
   </form>
