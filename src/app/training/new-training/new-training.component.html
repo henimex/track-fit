@@ -2,17 +2,22 @@
   <mat-card fxFlex.xs="100%" fxFlex="400px">
     <mat-card-title fxLayoutAlign="center">Time to start workout</mat-card-title>
 
-    <mat-card-content fxLayoutAlign="center">
-      <mat-form-field>
-        <mat-select placeholder="Available Trainings">
-          <mat-option *ngFor="let exercise of exercises" value="exercise.id">{{ exercise.name }} D:({{ exercise.duration }}) C: ({{ exercise.calories}})</mat-option>
-
-        </mat-select>
-      </mat-form-field>
-    </mat-card-content>
+    <form (ngSubmit)="onStartTraining(f)" #f="ngForm">
+      <mat-card-content fxLayoutAlign="center">
+        <mat-form-field>
+          <mat-select placeholder="Available Trainings" ngModel name="exerciseFromHtml" required>
+            <mat-option
+              *ngFor="let exercise of exercises" [value]="exercise.id">
+              {{ exercise.name }} D:({{ exercise.duration }}) C: ({{ exercise.calories}})
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
 
     <mat-card-actions fxLayoutAlign="center">
-      <button type="submit" mat-raised-button color="primary" (click)="onStartTraining()">Start</button>
+      <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Start</button>
     </mat-card-actions>
+    </form>
   </mat-card>
+
 </section>
