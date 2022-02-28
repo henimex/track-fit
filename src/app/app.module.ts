@@ -20,6 +20,7 @@ import { StopTrainingComponent } from './training/current-training/stop-training
 import { AuthService } from "./auth/auth.service";
 import { TrainingService } from "./training/training.service";
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,15 +35,15 @@ import { TrainingService } from "./training/training.service";
     SidenavListComponent,
     StopTrainingComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MaterialModule,
+        FlexLayoutModule,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
   providers: [AuthService, TrainingService],
   bootstrap: [AppComponent],
   entryComponents: [StopTrainingComponent]
