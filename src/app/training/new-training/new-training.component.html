@@ -7,7 +7,7 @@
         <mat-form-field>
           <mat-select placeholder="Available Trainings" ngModel name="exerciseFromHtml" required>
             <mat-option
-              *ngFor="let exercise of exercises | async" [value]="exercise.name">
+              *ngFor="let exercise of exercises | async" [value]="exercise.id">
               {{ exercise.name }} D:({{ exercise.duration }}) C: ({{ exercise.calories}})
             </mat-option>
           </mat-select>

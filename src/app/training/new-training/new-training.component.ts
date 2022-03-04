@@ -1,9 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Exercise } from "../exercise.model";
-import { TrainingService } from "../training.service";
-import { NgForm } from "@angular/forms";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { Observable } from "rxjs";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Exercise} from "../exercise.model";
+import {TrainingService} from "../training.service";
+import {NgForm} from "@angular/forms";
+import {AngularFirestore} from "@angular/fire/compat/firestore";
+import {map, Observable} from "rxjs";
+
+
+//import { map } from "rxjs/operators";
 
 @Component({
   selector: 'app-new-training',
@@ -13,33 +16,76 @@ import { Observable } from "rxjs";
 export class NewTrainingComponent implements OnInit {
 
   //@Output() trainingStart = new EventEmitter<void>();
-  exercises: Observable<any>;
+  exercises: Observable<Exercise[]>;
 
   constructor(
     private trainingService: TrainingService,
     private dbFireStore: AngularFirestore
-    ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.getExercises();
-    this.getExercisesWithFire();
+    this.getExercisesWithFireV3();
+    this.getDataWithId();
+  }
+
+  getDataWithId() {
+    this.exercises = this.dbFireStore.collection('availableExercises')
+      .snapshotChanges()
+      .pipe(map(docArray => {
+        return docArray.map(doc => {
+          return {
+            id: doc.payload.doc.id,
+            name: (doc.payload.doc.data() as Exercise).name,
+            duration: (doc.payload.doc.data() as Exercise).duration,
+            calories: (doc.payload.doc.data() as Exercise).calories
+          }
+        })
+      }))
   }
 
   onStartTraining(form: NgForm) {
     this.trainingService.startExercise(form.value.exerciseFromHtml)
   }
 
-  getExercises(){
+  getExercises() {
     //this.exercises = this.trainingService.getExercises();
   }
 
-  getExercisesWithFireDep(){
-    this.dbFireStore.collection('availableExercises').valueChanges().subscribe(response => {
-      console.log(response)
-    })
+  getExercisesWithFire() {
+    //this.exercises = this.dbFireStore.collection('availableExercises').valueChanges();
   }
 
-  getExercisesWithFire(){
-    this.exercises = this.dbFireStore.collection('availableExercises').valueChanges();
+  //Tests
+  getExercisesWithFireV3() {
+    this.dbFireStore.collection('availableExercises').valueChanges().subscribe(response => {
+      console.log('Value Changes ', response);
+    })
+
+    this.dbFireStore.collection('availableExercises').snapshotChanges().subscribe(response => {
+      console.log('Snapshot Changes ', response);
+    });
+
+    this.dbFireStore.collection('availableExercises').snapshotChanges().subscribe(response => {
+      console.log('Snapshot Changes With Data')
+      for (const res of response) {
+        console.log(res.payload.doc.data());
+      }
+    });
+
+    this.dbFireStore.collection('availableExercises')
+      .snapshotChanges()
+      .pipe(map(docArray => {
+        return docArray.map(doc => {
+          return {
+            id: doc.payload.doc.id,
+            ...(doc.payload.doc.data() as object)
+            //...doc.payload.doc.data() as {} //alternative
+          }
+        })
+      })).subscribe(result => {
+      console.log('Mapping ID : ', result)
+    })
   }
 }
