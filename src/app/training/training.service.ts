@@ -41,6 +41,7 @@ export class TrainingService {
   }
 
   startExercise(selectedId: string) {
+    this.dbFireStore.doc('availableExercises/' + selectedId).update({lastSelected: new Date()})
     // @ts-ignore
     this.runningExercise = this.availableExercises.find(ex => ex.id === selectedId)
     this.exerciseChanged.next({ ...this.runningExercise })
