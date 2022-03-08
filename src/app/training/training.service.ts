@@ -8,11 +8,11 @@ import {AngularFirestore} from "@angular/fire/compat/firestore";
 })
 export class TrainingService {
 
-  availableExercises: Exercise[] = []
+  private availableExercises: Exercise[] = []
   private runningExercise: Exercise;
-  private exercises: Exercise[] = [];
   exerciseChanged = new Subject<Exercise>();
   exercisesChanged = new Subject<Exercise[]>();
+  finishedExercisesChanged = new Subject<Exercise[]>();
 
   constructor( private dbFireStore: AngularFirestore ) {
   }
@@ -36,6 +36,10 @@ export class TrainingService {
       })
   }
 
+  private addData(exercise: Exercise){
+    this.dbFireStore.collection('finishedExercises').add(exercise);
+  }
+
   startExercise(selectedId: string) {
     // @ts-ignore
     this.runningExercise = this.availableExercises.find(ex => ex.id === selectedId)
@@ -47,7 +51,7 @@ export class TrainingService {
   }
 
   completeExercise() {
-    this.exercises.push({ ...this.runningExercise, date: new Date(), state: 'completed' });
+    this.addData({ ...this.runningExercise, date: new Date(), state: 'completed' });
     // @ts-ignore
     this.runningExercise = null;
 
@@ -56,7 +60,7 @@ export class TrainingService {
   }
 
   cancelExercise(progress: number) {
-    this.exercises.push({
+    this.addData({
       ...this.runningExercise,
       date: new Date(),
       duration: this.runningExercise.duration * (progress / 100),
@@ -71,7 +75,13 @@ export class TrainingService {
     this.exerciseChanged.next(null);
   }
 
-  getCompletedOrCancelledExercises(){
-    return this.exercises.slice();
+  fetchCompletedOrCancelledExercises(){
+    this.dbFireStore
+      .collection('finishedExercises')
+      .valueChanges()
+      // @ts-ignore
+      .subscribe((exercises: Exercise[]) => {
+        this.finishedExercisesChanged.next(exercises);
+      });
   }
 }
