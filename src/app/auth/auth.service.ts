@@ -4,6 +4,7 @@ import { Subject } from "rxjs";
 import { Router } from "@angular/router";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import {TrainingService} from "../training/training.service";
+import {MatSnackBar } from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private auth: AngularFireAuth,
-    private trainingService: TrainingService
+    private trainingService: TrainingService,
+    private snackbar: MatSnackBar
   ) { }
 
   registerUser(authData: AuthData) {
@@ -25,7 +27,7 @@ export class AuthService {
 
       })
       .catch(error => {
-        console.log(error)
+        this.snackbar.open(error.message, 'Register Error', {duration:3000});
       });
   }
 
@@ -35,7 +37,8 @@ export class AuthService {
 
       })
       .catch(error => {
-        console.log(error)
+        this.snackbar.open(error.message, 'Login Error', {duration:3000});
+        console.log(error.errorCode)
       });
   }
 
