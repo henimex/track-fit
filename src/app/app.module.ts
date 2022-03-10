@@ -23,6 +23,7 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { environment } from "../environments/environment";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import {AngularFireAuthModule} from "@angular/fire/compat/auth";
+import { UIService } from "./shared/ui.service";
 
 
 @NgModule({
@@ -52,7 +53,7 @@ import {AngularFireAuthModule} from "@angular/fire/compat/auth";
         AngularFirestoreModule,
         AngularFireAuthModule
     ],
-  providers: [AuthService, TrainingService],
+  providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent],
   entryComponents: [StopTrainingComponent]
 })

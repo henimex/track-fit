@@ -37,7 +37,8 @@
 
     <mat-checkbox ngModel name="agree" required labelPosition="after" color="primary">Agree to Terms</mat-checkbox>
 
-    <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Register</button>
+    <button *ngIf="!isLoading" type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Register</button>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
     <button type="button" mat-raised-button color="warn" (click)="logTest('hi there')">Log Test</button>
 
   </form>
