@@ -1,56 +1,73 @@
 import { Injectable } from '@angular/core';
-import { User } from "./user.model";
 import { AuthData } from "./auth-data.model";
 import { Subject } from "rxjs";
 import { Router } from "@angular/router";
+import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {TrainingService} from "../training/training.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  user: User;
+  private isAuthStatus: boolean = false;
   authChange = new Subject<boolean>();
 
-  constructor(private router: Router) {
-  }
+  constructor(
+    private router: Router,
+    private auth: AngularFireAuth,
+    private trainingService: TrainingService
+  ) { }
 
   registerUser(authData: AuthData) {
-    this.user = {
-      email: authData.email,
-      userId: Math.round(Math.random() * 10000).toString()
-    };
-    this.authChange.next(true);
-    this.authSuccessful('/training')
+    this.auth.createUserWithEmailAndPassword(authData.email, authData.password)
+      .then(result=>{
+
+      })
+      .catch(error => {
+        console.log(error)
+      });
   }
 
   login(authData: AuthData) {
-    this.user = {
-      email: authData.email,
-      userId: Math.round(Math.random() * 10000).toString()
-    }
-    this.authChange.next(true);
-    this.authSuccessful('/training')
+    this.auth.signInWithEmailAndPassword(authData.email, authData.password)
+      .then(result => {
+
+      })
+      .catch(error => {
+        console.log(error)
+      });
+  }
+
+  initAuthListener(){
+    this.auth.authState.subscribe(user => {
+      if (user){
+        this.isAuthStatus = true;
+        this.authChange.next(true);
+        this.router.navigate(['/training']).then(result => {
+          console.log('Navigate Result', result);
+        });
+      } else {
+        this.trainingService.cancelSubscriptions();
+        this.authChange.next(false);
+        this.router.navigate(['/welcome']).then(result => {
+          console.log('Navigate Result', result);
+        });
+        this.isAuthStatus = false;
+      }
+    })
   }
 
   logout() {
-    this.user = {
-      email: "",
-      userId: ""
-    }
-    this.authChange.next(false);
-    this.authSuccessful('/welcome')
+    this.auth.signOut();
   }
 
   getUser() {
-    return { ...this.user };
+    return null;
   }
 
   isAuth() {
-    return this.user != null;
+    return this.isAuthStatus;
   }
 
-  private authSuccessful(pageNam: string){
-    this.router.navigate([pageNam]);
-  }
 }

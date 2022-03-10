@@ -25,8 +25,8 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.getExercises();
-    this.getExercisesWithFireV3();
+    //this.getExercises();
+    //this.getExercisesWithFireV3();
     this.getDataWithId();
   }
 
