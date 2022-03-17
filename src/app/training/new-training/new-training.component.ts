@@ -4,6 +4,7 @@ import {TrainingService} from "../training.service";
 import {NgForm} from "@angular/forms";
 import {AngularFirestore} from "@angular/fire/compat/firestore";
 import {map, Observable, Subscription} from "rxjs";
+import {UIService} from "../../shared/ui.service";
 
 
 //import { map } from "rxjs/operators";
@@ -17,17 +18,29 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
 
   //@Output() trainingStart = new EventEmitter<void>();
   exercises: Exercise[];
-  exerciseSubscription: Subscription;
+  private exerciseSubscription: Subscription;
+  private loadingSubscription: Subscription;
+  isLoading:boolean = true;
 
   constructor(
     private trainingService: TrainingService,
-    private dbFireStore: AngularFirestore
+    private dbFireStore: AngularFirestore,
+    private uiService: UIService
   ) { }
 
   ngOnInit(): void {
     //this.getExercises();
     //this.getExercisesWithFireV3();
     this.getDataWithId();
+    this.loadSpinnerStatus();
+  }
+
+  loadSpinnerStatus(){
+    this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(
+      isLoading => {
+        this.isLoading = isLoading;
+      }
+    );
   }
 
   getDataWithId() {
