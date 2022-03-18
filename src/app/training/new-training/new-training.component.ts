@@ -20,13 +20,14 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   exercises: Exercise[];
   private exerciseSubscription: Subscription;
   private loadingSubscription: Subscription;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   constructor(
     private trainingService: TrainingService,
     private dbFireStore: AngularFirestore,
     private uiService: UIService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     //this.getExercises();
@@ -35,7 +36,7 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
     this.loadSpinnerStatus();
   }
 
-  loadSpinnerStatus(){
+  loadSpinnerStatus() {
     this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(
       isLoading => {
         this.isLoading = isLoading;
@@ -95,6 +96,11 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.exerciseSubscription.unsubscribe();
+    if (this.exerciseSubscription) {
+      this.exerciseSubscription.unsubscribe();
+    }
+    if (this.loadingSubscription) {
+      this.loadingSubscription.unsubscribe();
+    }
   }
 }

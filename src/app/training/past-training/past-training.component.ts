@@ -11,7 +11,7 @@ import {Subscription} from "rxjs";
   templateUrl: './past-training.component.html',
   styleUrls: ['./past-training.component.css']
 })
-export class PastTrainingComponent implements OnInit,AfterViewInit,OnDestroy {
+export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns = ['date', 'name', 'duration', 'calories', 'state'];
   dataSource = new MatTableDataSource<Exercise>();
@@ -28,13 +28,17 @@ export class PastTrainingComponent implements OnInit,AfterViewInit,OnDestroy {
     this.subToExercises();
   }
 
-  getExercises(){
+  getExercises() {
     this.trainingService.fetchCompletedOrCancelledExercises();
   }
 
-  subToExercises(){
-    this.exChangedSub = this.trainingService.finishedExercisesChanged.subscribe((exercises:Exercise[]) => {
-      this.dataSource.data = exercises;
+  subToExercises() {
+    this.exChangedSub = this.trainingService.finishedExercisesChanged.subscribe((exercises: Exercise[]) => {
+      this.dataSource.data = exercises
+      // let data = exercises
+      // exercises.sort((a,b)=> new Date(b.date!).getTime() - new Date(a.date!).getTime())
+      // console.log(data)
+      // this.dataSource.data = data;
     })
   }
 
@@ -43,12 +47,14 @@ export class PastTrainingComponent implements OnInit,AfterViewInit,OnDestroy {
     this.dataSource.paginator = this.paginatorName;
   }
 
-  doFilter(filterValue: any){
+  doFilter(filterValue: any) {
     this.dataSource.filter = filterValue.target.value.trim().toLocaleLowerCase()
   }
 
   ngOnDestroy(): void {
-    this.exChangedSub.unsubscribe();
+    if (this.exChangedSub) {
+      this.exChangedSub.unsubscribe();
+    }
   }
 
 }

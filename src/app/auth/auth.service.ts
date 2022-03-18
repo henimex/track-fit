@@ -57,7 +57,7 @@ export class AuthService {
       } else {
         this.trainingService.cancelSubscriptions();
         this.authChange.next(false);
-        this.router.navigate(['/welcome']).then(result => {
+        this.router.navigate(['/login']).then(result => {
           console.log('Navigate Result', result);
         });
         this.isAuthStatus = false;
