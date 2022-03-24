@@ -17,7 +17,8 @@ import {AngularFirestoreModule} from "@angular/fire/compat/firestore";
 import {UIService} from "./shared/ui.service";
 import {AuthModule} from "./auth/auth.module";
 import {TrainingModule} from "./training/training.module";
-
+import {StoreModule} from '@ngrx/store';
+import {appReducer} from './app.reducer';
 
 
 @NgModule({
@@ -38,7 +39,7 @@ import {TrainingModule} from "./training/training.module";
     AuthModule,
     TrainingModule,
     AuthModule,
-
+    StoreModule.forRoot({ui: appReducer}),
   ],
   providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent]
